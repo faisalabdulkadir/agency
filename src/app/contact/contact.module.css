@@ -6,7 +6,7 @@
 
 .imgContainer {
   flex: 1;
-  position:relative;
+  position: relative;
   height: 500px;
 }
 
@@ -24,7 +24,8 @@
   gap: 20px;
 }
 
-.form input, .form textarea {
+.form input,
+.form textarea {
   padding: 10px;
   border-radius: 5px;
   background-color: var(--bg-soft);
@@ -41,4 +42,10 @@
   border: none;
   cursor: pointer;
   font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
 }
