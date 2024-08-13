@@ -20,11 +20,6 @@
   object-fit: cover;
 }
 
-.avatar {
-  object-fit: cover;
-  border-radius: 50%;
-}
-
 .title {
   font-size: 64px;
 }
