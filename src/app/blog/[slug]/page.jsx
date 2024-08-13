@@ -1,42 +1,50 @@
 import Image from "next/image";
 import styles from "./singlePost.module.css";
+import PostUser from "@/component/postUser/postUser";
+import { Suspense } from "react";
+import { getPost } from "@/lib/data";
 
-const SinglePostPage = () => {
+// const getData = async (slug) => {
+//   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`);
+//   if (!res.ok) {
+//     throw new Error("Something went wrong");
+//   }
+//   return res.json();
+// };
+
+const SinglePostPage = async ({ params }) => {
+  const { slug } = params;
+  // const post = await getData(slug);
+  //WITHOUT AN API
+  const post = await getPost(slug);
+  console.log("single", post)
   return (
     <div className={styles.container}>
       <div className={styles.imgContainer}>
-        <Image
-          src="https://images.pexels.com/photos/23698640/pexels-photo-23698640/free-photo-of-a-wind-turbine-in-the-middle-of-a-field.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+      {post.img && (
+          <Image
+          src={post.img}
           fill
+          sizes="100%"
           alt=""
           className={styles.img}
         />
+      )}
       </div>
       <div className={styles.textContainer}>
-        <h1>Title</h1>
+        <h1>{post.title}</h1>
         <div className={styles.details}>
-          <Image
-            src="https://images.pexels.com/photos/23698640/pexels-photo-23698640/free-photo-of-a-wind-turbine-in-the-middle-of-a-field.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            width={50}
-            height={50}
-            alt=""
-            className={styles.avatar}
-          />
-          <div className={styles.detailsText}>
-            <span className={styles.detailsTitle}>Author</span>
-            <span className={styles.detailsValue}>Jhon Smith</span>
-          </div>
+          {post && (
+            <Suspense fallback={<h3>Loading...</h3>}>
+              <PostUser userId={post.userId} />
+            </Suspense>
+          )}
           <div className={styles.detailsText}>
             <span className={styles.detailsTitle}>Published</span>
-            <span className={styles.detailsValue}>01.01.2024</span>
+            <span className={styles.detailsValue}>{post.createdAt.toString().slice(4,16)}</span>
           </div>
         </div>
-        <div className={styles.detailsContent}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </div>
+        <div className={styles.detailsContent}>{post.desc}</div>
       </div>
     </div>
   );
