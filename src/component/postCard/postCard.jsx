@@ -2,7 +2,8 @@ import Image from "next/image";
 import styles from "./postCard.module.css";
 import Link from "next/link";
 
-const PostCard = () => {
+const PostCard = ({ post }) => {
+  console.log("post", post)
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -10,6 +11,7 @@ const PostCard = () => {
           <Image
             src="https://images.pexels.com/photos/23698640/pexels-photo-23698640/free-photo-of-a-wind-turbine-in-the-middle-of-a-field.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
             fill
+            sizes="100%"
             alt=""
             className={styles.img}
           />
@@ -17,14 +19,11 @@ const PostCard = () => {
         <span className={styles.date}>01.01.2024</span>
       </div>
       <div className={styles.bottom}>
-        <h1 className={styles.title}>Title</h1>
-        <p className={styles.desc}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </p>
-        <Link className={styles.link} href={{ pathname: "/blog/post" }}>READ MORE</Link>
+        <h1 className={styles.title}>{post.title}</h1>
+        <p className={styles.desc}>{post.body}</p>
+        <Link className={styles.link} href={{ pathname: `/blog/${post.slug}` }}>
+          READ MORE
+        </Link>
       </div>
     </div>
   );
