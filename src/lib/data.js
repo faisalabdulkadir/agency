@@ -30,7 +30,6 @@ export const getPost = async (slug) => {
   try {
     connectToDB();
     const post = await Post.findOne({ slug });
-    console.log("my post", post);
     return post;
   } catch (error) {
     console.log(error);
