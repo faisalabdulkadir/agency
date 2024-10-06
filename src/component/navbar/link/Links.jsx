@@ -3,6 +3,7 @@ import styles from "./links.module.css";
 import NavLink from "../navLink/NavLink";
 import { useState } from "react";
 import Image from "next/image";
+import { handleLogoutGithub } from "@/lib/action";
 
 const links = [
   { title: "Home", path: "/" },
@@ -10,11 +11,10 @@ const links = [
   { title: "Contact", path: "/contact" },
   { title: "Blog", path: "/blog" },
 ];
-const Links = () => {
+const Links = ({ session }) => {
   const [open, setOpen] = useState(false);
 
   // Temporary conditions
-  const session = true;
   const isAdmin = true;
   return (
     <div className={styles.container}>
@@ -22,10 +22,14 @@ const Links = () => {
         {links.map((link, index) => (
           <NavLink item={link} key={index} />
         ))}
-        {session ? (
+        {session?.user ? (
           <>
-            {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
-            <button className={styles.logout}>Logout</button>
+            {session.user?.isAdmin && (
+              <NavLink item={{ title: "Admin", path: "/admin" }} />
+            )}
+            <form action={handleLogoutGithub}>
+              <button className={styles.logout}>Logout</button>
+            </form>
           </>
         ) : (
           <NavLink item={{ title: "Login", path: "/login" }} />
