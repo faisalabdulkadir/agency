@@ -43,18 +43,20 @@ export const handleLogoutGithub = async () => {
   await signOut();
 };
 
-export const register = async (data) => {
+export const deleteItem = (id) => {};
+
+export const register = async (prevState, data) => {
   const { username, email, password, passwordRepeat, img } =
     Object.fromEntries(data);
   console.log({ username, email, password, passwordRepeat, img });
   if (password !== passwordRepeat) {
-    return "Password do not match";
+    return { error: "Password do not match" };
   }
   try {
     connectToDB();
     const user = await User.findOne({ username });
     if (user) {
-      return "User already exist in our record";
+      return { error: "User already exist in our record" };
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -67,10 +69,27 @@ export const register = async (data) => {
       img,
     });
     await newUser.save();
-    return "user saved to db";
-  } catch (error) {
-    console.log(error);
-    return { Error: "Something went wrong" };
+    console.log("user saved to db");
+    return { success: true };
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong" };
+  }
+  //test if user already exists then notify us
+  //if user doesn't exist create a new user and save on the db
+};
+
+export const login = async (prevState, data) => {
+  const { username, password } = Object.fromEntries(data);
+  // console.log({ username, password });
+  try {
+    await signIn("credentials", { username, password });
+  } catch (err) {
+    console.log({ err });
+    if (err.message === "CredentialsSignin") {
+      return { error: "Invalid username and password" };
+    }
+    return { error: "Something went wrong" };
   }
   //test if user already exists then notify us
   //if user doesn't exist create a new user and save on the db
