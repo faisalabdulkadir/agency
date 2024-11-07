@@ -27,7 +27,7 @@ function RegisterFormPage() {
       />
       <button>Register</button>
       {state?.error}
-      <Link href="/login">Have an account already? Click to login</Link>
+      <Link href="/login">Have an account already? <b>Login</b></Link>
     </form>
   );
 }
