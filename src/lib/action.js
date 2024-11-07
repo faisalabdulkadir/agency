@@ -43,8 +43,7 @@ export const handleLogoutGithub = async () => {
   await signOut();
 };
 
-export const deleteItem = (id) => {
-}
+export const deleteItem = (id) => {};
 
 export const register = async (prevState, data) => {
   const { username, email, password, passwordRepeat, img } =
@@ -80,13 +79,16 @@ export const register = async (prevState, data) => {
   //if user doesn't exist create a new user and save on the db
 };
 
-export const login = async (data) => {
+export const login = async (prevState, data) => {
   const { username, password } = Object.fromEntries(data);
   // console.log({ username, password });
   try {
     await signIn("credentials", { username, password });
   } catch (err) {
-    console.log(err);
+    console.log({ err });
+    if (err.message === "CredentialsSignin") {
+      return { error: "Invalid username and password" };
+    }
     return { error: "Something went wrong" };
   }
   //test if user already exists then notify us
